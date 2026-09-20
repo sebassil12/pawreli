@@ -1,0 +1,145 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import PetLayout from '~/layouts/PetLayout.astro';
+
+export const prerender = true;
+
+// Root-level dynamic route (no /p prefix): every extra URL character adds
+// modules to the engraved QR, and smaller modules scan worse on a 2.5cm tag.
+// Static routes (index, privacy, terms, 404) take priority over this one.
+export const getStaticPaths = (async () => {
+  const pets = await getCollection('pets');
+  return pets.map((pet) => ({
+    params: { slug: pet.id },
+    props: { pet },
+  }));
+}) satisfies GetStaticPaths;
+
+const { pet } = Astro.props;
+const { nombre, raza, foto, tutor, whatsapp, nota } = pet.data;
+
+// The engraved tag code is the filename token, uppercased and split: a7k9x2m4 -> A7K9-X2M4.
+const codigo = `${pet.id.slice(0, 4)}-${pet.id.slice(4)}`.toUpperCase();
+
+const mensaje = encodeURIComponent(`¡Hola! Encontré a ${nombre} 🐾`);
+const whatsappHref = `https://wa.me/${whatsapp}?text=${mensaje}`;
+const telHref = `tel:+${whatsapp}`;
+
+// Human-readable phone for the tel: label. Ecuador (593) -> 0XX XXX XXXX.
+const telLabel = whatsapp.startsWith('593')
+  ? ('0' + whatsapp.slice(3)).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')
+  : `+${whatsapp}`;
+---
+
+<PetLayout title={`¿Encontraste a ${nombre}?`}>
+  <style is:inline>
+    h1 {
+      font-size: 30px;
+      line-height: 1.15;
+      margin: 8px 0 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .foto {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 14px;
+      background: var(--line);
+      display: block;
+    }
+    .datos {
+      margin: 16px 0 22px;
+    }
+    .nombre {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .raza {
+      font-size: 17px;
+      color: var(--ink-muted);
+      margin: 4px 0 0;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 62px;
+      padding: 16px;
+      background: var(--teal);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+    }
+    .tel {
+      display: block;
+      width: 100%;
+      min-height: 56px;
+      margin-top: 12px;
+      padding: 16px;
+      border: 2px solid var(--teal);
+      border-radius: 12px;
+      color: var(--teal);
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+    }
+    .nota {
+      margin-top: 24px;
+      padding: 14px 16px;
+      background: #fbf5ec;
+      border-left: 4px solid var(--peach);
+      border-radius: 0 8px 8px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .codigo {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      color: var(--ink-muted);
+    }
+    .codigo b {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 16px;
+      color: var(--ink);
+      letter-spacing: 0.05em;
+    }
+    footer {
+      margin-top: 22px;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+    footer a {
+      color: var(--ink-muted);
+    }
+  </style>
+
+  <h1>¿Encontraste a {nombre}?</h1>
+
+  <img class="foto" src={foto} alt={nombre} width="412" height="309" decoding="async" />
+
+  <div class="datos">
+    <p class="nombre">{nombre}</p>
+    <p class="raza">{raza}</p>
+  </div>
+
+  <a class="btn" href={whatsappHref}>Avisar a {tutor} por WhatsApp</a>
+
+  <a class="tel" href={telHref}>o llamar al {telLabel}</a>
+
+  {nota && <p class="nota">{nota}</p>}
+
+  <p class="codigo">Código de la placa: <b>{codigo}</b></p>
+
+  <footer>Placa <a href="/">Pawreli</a></footer>
+</PetLayout>
