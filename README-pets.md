@@ -1,38 +1,21 @@
 # Agregar una mascota
 
-Tres pasos. El código de 8 caracteres del archivo es el mismo que se graba en la placa.
+Tres pasos. El script hace todo lo demás.
 
-### 1. Crea el archivo de la mascota
-
-Genera un código y crea el archivo `src/content/pets/<codigo>.md`:
+### 1. Corre el generador
 
 ```bash
-CODIGO=$(openssl rand -hex 4)   # p. ej. a7k9x2m4
-echo "$CODIGO"                  # anótalo: en la placa se graba como A7K9-X2M4
+npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
+  --tutor "María" --whatsapp 593999999999 --nota "Es nerviosa con desconocidos"
 ```
 
-Contenido del archivo (`src/content/pets/a7k9x2m4.md`):
+`--nota` es opcional. `--whatsapp` con código de país, solo dígitos.
 
-```yaml
----
-nombre: Luna
-raza: Golden Retriever
-foto: /pets/a7k9x2m4.jpg
-tutor: María
-whatsapp: '593999999999' # país + número, sin el +
-nota: 'Es muy nerviosa con desconocidos' # opcional, borra la línea si no aplica
----
-```
+El script crea el archivo de la mascota, genera los QR en `qr/<token>/` e imprime el **token**, el **código a grabar** (`A7K9-X2M4`), la **URL** y dónde va la foto. Anota el código.
 
 ### 2. Pon la foto
 
-Copia la foto de la mascota a `public/pets/` con el mismo código del paso 1:
-
-```
-public/pets/a7k9x2m4.jpg
-```
-
-Debe coincidir con el campo `foto` del archivo (`.jpg`, `.png` o `.svg`).
+Copia la foto a `public/pets/<token>.jpg` (el token que imprimió el script). Debe ser `.jpg` y coincidir con el nombre.
 
 ### 3. Publica
 
@@ -40,4 +23,15 @@ Debe coincidir con el campo `foto` del archivo (`.jpg`, `.png` o `.svg`).
 git add src/content/pets public/pets && git commit -m "pet: Luna" && git push
 ```
 
-Vercel publica solo. En un par de minutos, `https://pawreli.com/p/a7k9x2m4` muestra el perfil.
+Vercel publica solo. En un par de minutos, `https://pawreli.com/<token>` muestra el perfil.
+
+---
+
+## Qué mandar al taller
+
+En `qr/<token>/` hay cuatro SVG. Son vectores, listos para grabado láser.
+
+- **Empieza con `qr-may-Q.svg`** (mayúsculas, corrección Q): es el más compacto y el más tolerante a rayones. El script imprime la versión y los módulos por lado de cada uno; a menor versión, módulos más grandes y mejor lectura en placa chica.
+- **Medida:** placa de ~2.5 cm de lado. Deja el QR lo más grande que entre.
+- **Pídele al grabador:** grabar el SVG **tal cual, sin recortar el borde blanco** (esa zona de silencio de 4 módulos es parte del código), negro pleno sobre el metal, **sin logo ni texto encima** del QR.
+- Si un QR no escanea bien en la placa física, prueba otra de las cuatro variantes antes de rediseñar nada.
