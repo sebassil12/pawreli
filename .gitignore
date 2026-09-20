@@ -31,3 +31,6 @@ pnpm-workspace.yaml
 .claude/
 .codegraph/
 .mcp.json
+
+# QR files for the engraver (not part of the site)
+qr/

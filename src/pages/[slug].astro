@@ -10,10 +10,19 @@ export const prerender = true;
 // Static routes (index, privacy, terms, 404) take priority over this one.
 export const getStaticPaths = (async () => {
   const pets = await getCollection('pets');
-  return pets.map((pet) => ({
-    params: { slug: pet.id },
-    props: { pet },
-  }));
+  // Emit both lowercase and UPPERCASE slugs so the alphanumeric (uppercase) QR
+  // variant resolves too. Vercel redirects can't case-fold a path, so we serve
+  // both statically instead. Deduped in case a token is all digits.
+  const paths = [];
+  const seen = new Set<string>();
+  for (const pet of pets) {
+    for (const slug of [pet.id, pet.id.toUpperCase()]) {
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      paths.push({ params: { slug }, props: { pet } });
+    }
+  }
+  return paths;
 }) satisfies GetStaticPaths;
 
 const { pet } = Astro.props;
