@@ -26,3 +26,8 @@ pnpm-lock.yaml
 pnpm-workspace.yaml
 
 .astro
+# Local AI tooling
+.atl/
+.claude/
+.codegraph/
+.mcp.json
