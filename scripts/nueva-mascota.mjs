@@ -13,7 +13,12 @@ import QRCode from 'qrcode';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DOMAIN = 'https://pawreli.com';
 
+// npm strips the `--` separator; pnpm forwards it literally. Drop any stray `--`
+// (and tolerate positionals) so `npm|pnpm run nueva-mascota -- --nombre ...` both work.
+const args = process.argv.slice(2).filter((a) => a !== '--');
 const { values } = parseArgs({
+  args,
+  allowPositionals: true,
   options: {
     nombre: { type: 'string' },
     raza: { type: 'string' },
