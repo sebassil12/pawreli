@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 576" width="1024" height="576" role="img" aria-label="Placa QR Pawreli (placeholder)">
+  <rect width="1024" height="576" fill="#e8f4f1"/>
+  <g transform="translate(362 128)">
+    <rect x="0" y="0" width="300" height="320" rx="40" fill="#fff" stroke="#1b6560" stroke-width="8"/>
+    <circle cx="150" cy="30" r="16" fill="none" stroke="#1b6560" stroke-width="8"/>
+    <rect x="70" y="70" width="160" height="160" rx="10" fill="#15302a"/>
+    <g fill="#fff">
+      <rect x="86" y="86" width="34" height="34"/>
+      <rect x="180" y="86" width="34" height="34"/>
+      <rect x="86" y="180" width="34" height="34"/>
+      <rect x="140" y="140" width="20" height="20"/>
+      <rect x="180" y="180" width="16" height="16"/>
+      <rect x="200" y="200" width="14" height="14"/>
+    </g>
+    <text x="150" y="285" text-anchor="middle" font-family="system-ui, sans-serif" font-size="34" font-weight="800" fill="#1b6560">Pawreli</text>
+  </g>
+  <text x="512" y="520" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" fill="#4a6b63">Imagen de producto (placeholder)</text>
+</svg>
