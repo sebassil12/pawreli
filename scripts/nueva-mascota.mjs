@@ -67,63 +67,118 @@ frontmatter += '---\n';
 const petFile = path.join(ROOT, 'src/content/pets', `${token}.md`);
 writeFileSync(petFile, frontmatter);
 
+// Glifos hex + guion como trazos vectoriales (sans-serif bold, sin depender de
+// una fuente instalada). Normalizado 0..1 (y hacia abajo), escalado a cada celda.
+function glyphD(ch, X, Y, W, H) {
+  const x = (n) => +(X + n * W).toFixed(3);
+  const y = (n) => +(Y + n * H).toFixed(3);
+  const M = (a, b) => `M ${x(a)} ${y(b)}`;
+  const L = (a, b) => `L ${x(a)} ${y(b)}`;
+  const A = (rx, ry, sweep, a, b) => `A ${+(rx * W).toFixed(3)} ${+(ry * H).toFixed(3)} 0 0 ${sweep} ${x(a)} ${y(b)}`;
+  const Lx = 0.16,
+    Rx = 0.84,
+    Cx = 0.5,
+    Ty = 0.06,
+    By = 0.94,
+    My = 0.5;
+  const rx = (Rx - Lx) / 2,
+    ry = (By - Ty) / 2;
+  switch (ch) {
+    case '0':
+      return `${M(Cx, Ty)} ${A(rx, ry, 1, Cx, By)} ${A(rx, ry, 1, Cx, Ty)}`;
+    case '1':
+      return `${M(Lx + 0.02, Ty + 0.2)} ${L(Cx, Ty)} ${L(Cx, By)} ${M(Lx, By)} ${L(Rx, By)}`;
+    case '2':
+      return `${M(Lx, Ty + 0.26)} ${A(rx, 0.22, 1, Rx, Ty + 0.26)} ${L(Lx, By)} ${L(Rx, By)}`;
+    case '3':
+      return `${M(Lx, Ty)} ${L(Rx, Ty)} ${L(Cx, My)} ${A(0.3, 0.26, 1, Lx + 0.02, By)}`;
+    case '4':
+      return `${M(Rx - 0.05, By)} ${L(Rx - 0.05, Ty)} ${L(Lx, My + 0.14)} ${L(Rx, My + 0.14)}`;
+    case '5':
+      return `${M(Rx, Ty)} ${L(Lx, Ty)} ${L(Lx, My)} ${L(Cx + 0.05, My)} ${A(0.3, 0.26, 1, Lx, By)}`;
+    case '6': {
+      const cy = By - 0.24;
+      return `${M(Lx, cy)} ${A(0.34, 0.22, 1, Rx, cy)} ${A(0.34, 0.22, 1, Lx, cy)} ${M(Lx, cy)} ${L(Cx - 0.02, Ty)}`;
+    }
+    case '7':
+      return `${M(Lx, Ty)} ${L(Rx, Ty)} ${L(Cx - 0.02, By)}`;
+    case '8':
+      return `${M(Cx, My)} ${A(0.3, 0.22, 1, Cx, Ty)} ${A(0.3, 0.22, 1, Cx, My)} ${A(0.34, 0.24, 0, Cx, By)} ${A(0.34, 0.24, 0, Cx, My)}`;
+    case '9': {
+      const cy = Ty + 0.24;
+      return `${M(Lx, cy)} ${A(0.34, 0.22, 1, Rx, cy)} ${A(0.34, 0.22, 1, Lx, cy)} ${M(Rx, cy)} ${L(Cx + 0.02, By)}`;
+    }
+    case 'A':
+      return `${M(Lx, By)} ${L(Cx, Ty)} ${L(Rx, By)} ${M(Lx + 0.12, My + 0.18)} ${L(Rx - 0.12, My + 0.18)}`;
+    case 'B':
+      return `${M(Lx, Ty)} ${L(Lx, By)} ${M(Lx, Ty)} ${L(Cx + 0.06, Ty)} ${A(0.26, 0.24, 1, Cx + 0.06, My)} ${L(Lx, My)} ${M(Cx + 0.06, My)} ${A(0.3, 0.24, 1, Cx + 0.06, By)} ${L(Lx, By)}`;
+    case 'C':
+      return `${M(Rx - 0.02, Ty + 0.18)} A ${+(0.4 * W).toFixed(3)} ${+(0.42 * H).toFixed(3)} 0 1 0 ${x(Rx - 0.02)} ${y(By - 0.18)}`;
+    case 'D':
+      return `${M(Lx, Ty)} ${L(Lx, By)} ${M(Lx, Ty)} ${L(Cx, Ty)} ${A(0.36, 0.44, 1, Cx, By)} ${L(Lx, By)}`;
+    case 'E':
+      return `${M(Rx, Ty)} ${L(Lx, Ty)} ${L(Lx, By)} ${L(Rx, By)} ${M(Lx, My)} ${L(Rx - 0.1, My)}`;
+    case 'F':
+      return `${M(Rx, Ty)} ${L(Lx, Ty)} ${L(Lx, By)} ${M(Lx, My)} ${L(Rx - 0.1, My)}`;
+    case '-':
+      return `${M(Lx + 0.04, My)} ${L(Rx - 0.04, My)}`;
+    default:
+      return '';
+  }
+}
+
 // 2. Placa lista para grabar: un solo SVG con medidas físicas reales (mm).
 const url = `${DOMAIN}/${token}`; // URL humana (la ruta acepta mayúsculas y minúsculas)
 const urlUpper = `${DOMAIN.toUpperCase()}/${token.toUpperCase()}`; // mayúsculas -> modo alfanumérico
 const EC = 'Q'; // Q no cuesta módulos extra frente a M en esta URL, y tolera más rayones
 const QUIET = 4; // zona de silencio, en módulos
 
-// Geometría de la placa, en mm. Cambiá `faceMM` para probar otra medida.
+// Geometría de la placa, en mm. Cambiá bodyWmm/bodyHmm para probar otra medida.
+// El hueco va integrado en el cuerpo (sin pestaña externa): más resistente en
+// acrílico, sin esquinas rectas de 90° que concentren la fuerza de un tirón.
 const PLACA = {
-  faceMM: 30, // cara cuadrada (donde va el QR)
-  tabWmm: 10, // ancho de la pestaña superior
-  tabHmm: 6, // alto de la pestaña (sobresale por encima de la cara)
-  cornerR: 2, // radio de las esquinas de la cara
+  bodyWmm: 30, // ancho del cuerpo
+  bodyHmm: 36, // alto del cuerpo
+  cornerR: 3, // radio de las esquinas (suaviza el punto de quiebre)
   holeDmm: 3, // diámetro del hueco de la argolla
-  holeFromTopMM: 3, // centro del hueco, desde el borde superior
-  qrMarginMM: 1.5, // margen del QR dentro de la cara, por lado
-  textMM: 2, // altura deseada del código grabado (se ajusta si no cabe)
+  holeCyMM: 5, // centro del hueco desde arriba (deja >=3 mm de pared sólida)
+  qrMarginMM: 2.5, // margen lateral libre del QR (aire para que la cámara enfoque)
+  qrTopMM: 8, // borde superior del área del QR (deja lugar al hueco arriba)
+  textMM: 2, // altura del código grabado
+  textGapMM: 0.5, // separación mínima entre el QR y el código
 };
 
 const qr = QRCode.create(urlUpper, { errorCorrectionLevel: EC });
 const size = qr.modules.size; // p. ej. 25
 const totalMods = size + 2 * QUIET; // 33
-const qrAreaMM = PLACA.faceMM - 2 * PLACA.qrMarginMM; // 27 (incluye zona de silencio)
+const qrAreaMM = PLACA.bodyWmm - 2 * PLACA.qrMarginMM; // ancho del QR (incluye zona de silencio)
 const moduleMM = qrAreaMM / totalMods; // ancho de un módulo, en mm
 
-const canvasW = PLACA.faceMM; // 30
-const canvasH = PLACA.tabHmm + PLACA.faceMM; // 36
-const faceY0 = PLACA.tabHmm; // la cara empieza debajo de la pestaña (y=6)
+const canvasW = PLACA.bodyWmm;
+const canvasH = PLACA.bodyHmm;
 const r = PLACA.cornerR;
-const tabX0 = (PLACA.faceMM - PLACA.tabWmm) / 2; // 10
-const tabX1 = tabX0 + PLACA.tabWmm; // 20
-
 const fmt = (n) => Number(n.toFixed(4));
 
-// --- corte (rojo): contorno de placa + pestaña como una sola silueta ---
-const outline = [
-  `M ${r},${faceY0}`,
-  `H ${tabX0}`,
-  `V 0`,
-  `H ${tabX1}`,
-  `V ${faceY0}`,
+// --- corte (rojo): cuerpo redondeado + hueco interior de la argolla ---
+const body = [
+  `M ${r} 0`,
   `H ${canvasW - r}`,
-  `A ${r} ${r} 0 0 1 ${canvasW},${faceY0 + r}`,
+  `A ${r} ${r} 0 0 1 ${canvasW} ${r}`,
   `V ${canvasH - r}`,
-  `A ${r} ${r} 0 0 1 ${canvasW - r},${canvasH}`,
+  `A ${r} ${r} 0 0 1 ${canvasW - r} ${canvasH}`,
   `H ${r}`,
-  `A ${r} ${r} 0 0 1 0,${canvasH - r}`,
-  `V ${faceY0 + r}`,
-  `A ${r} ${r} 0 0 1 ${r},${faceY0}`,
+  `A ${r} ${r} 0 0 1 0 ${canvasH - r}`,
+  `V ${r}`,
+  `A ${r} ${r} 0 0 1 ${r} 0`,
   'Z',
 ].join(' ');
-const holeCx = canvasW / 2; // 15
-const holeCy = PLACA.holeFromTopMM; // 3
-const holeR = PLACA.holeDmm / 2; // 1.5
+const holeCx = canvasW / 2;
+const holeCy = PLACA.holeCyMM;
+const holeR = PLACA.holeDmm / 2;
 
 // --- grabado (negro): módulos del QR ---
 const originX = PLACA.qrMarginMM + QUIET * moduleMM; // primer módulo oscuro
-const originY = faceY0 + PLACA.qrMarginMM + QUIET * moduleMM;
+const originY = PLACA.qrTopMM + QUIET * moduleMM;
 let rects = '';
 for (let row = 0; row < size; row++) {
   for (let col = 0; col < size; col++) {
@@ -135,70 +190,40 @@ for (let row = 0; row < size; row++) {
   }
 }
 
-// --- grabado (negro): código corto en 7 segmentos (trazos, sin depender de fuentes) ---
+// --- grabado (negro): código corto en sans-serif bold trazado (sin fuentes) ---
 const codigo = `${token.slice(0, 4)}-${token.slice(4)}`.toUpperCase();
-// El único espacio libre fuera de la zona de silencio es el margen inferior de la
-// cara (qrMarginMM). Si textMM no cabe ahí, se reduce y se avisa en consola.
-const strip = PLACA.qrMarginMM;
-const textH = Math.min(PLACA.textMM, strip - 0.2);
+const qrBottom = PLACA.qrTopMM + qrAreaMM;
+const bandTop = qrBottom + PLACA.textGapMM;
+const bandH = canvasH - bandTop - 0.3; // -0.3 mm de margen inferior
+const textH = Math.min(PLACA.textMM, bandH);
 const textClamped = textH < PLACA.textMM;
-const th = textH * 0.16; // grosor de segmento
-const gw = textH * 0.6; // ancho de glifo
-const gap = textH * 0.28; // separación entre glifos
-const vseg = (textH - 3 * th) / 2; // largo de los segmentos verticales
-// Segmentos encendidos por carácter (a=arriba, b=arr-der, c=ab-der, d=abajo,
-// e=ab-izq, f=arr-izq, g=medio). Cubre 0-9, A-F y el guion.
-const SEG = {
-  0: 'abcdef',
-  1: 'bc',
-  2: 'abdeg',
-  3: 'abcdg',
-  4: 'bcfg',
-  5: 'acdfg',
-  6: 'acdefg',
-  7: 'abc',
-  8: 'abcdefg',
-  9: 'abcdfg',
-  A: 'abcefg',
-  B: 'cdefg',
-  C: 'adef',
-  D: 'bcdeg',
-  E: 'adefg',
-  F: 'aefg',
-  '-': 'g',
-};
+const stroke = fmt(0.2 * textH); // trazo grueso (bold): profundidad de grabado, la pintura agarra
+const gw = textH * 0.62; // ancho de glifo
+const gap = textH * 0.34; // separación entre glifos
 const totalTextW = codigo.length * gw + (codigo.length - 1) * gap;
-let tx = (canvasW - totalTextW) / 2;
-const ty = canvasH - strip + (strip - textH) / 2; // centrado en el margen inferior
-const seg = (x, y, w, h) => `<rect x="${fmt(x)}" y="${fmt(y)}" width="${fmt(w)}" height="${fmt(h)}"/>`;
+let gx = (canvasW - totalTextW) / 2;
+const gy = bandTop + (bandH - textH) / 2;
 let glyphs = '';
 for (const ch of codigo) {
-  const on = SEG[ch] || '';
-  if (on.includes('a')) glyphs += seg(tx + th, ty, gw - 2 * th, th);
-  if (on.includes('g')) glyphs += seg(tx + th, ty + th + vseg, gw - 2 * th, th);
-  if (on.includes('d')) glyphs += seg(tx + th, ty + 2 * th + 2 * vseg, gw - 2 * th, th);
-  if (on.includes('f')) glyphs += seg(tx, ty + th, th, vseg);
-  if (on.includes('b')) glyphs += seg(tx + gw - th, ty + th, th, vseg);
-  if (on.includes('e')) glyphs += seg(tx, ty + 2 * th + vseg, th, vseg);
-  if (on.includes('c')) glyphs += seg(tx + gw - th, ty + 2 * th + vseg, th, vseg);
-  tx += gw + gap;
+  glyphs += `<path d="${glyphD(ch, gx, gy, gw, textH)}"/>`;
+  gx += gw + gap;
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasW}mm" height="${canvasH}mm" viewBox="0 0 ${canvasW} ${canvasH}">
   <g id="corte" fill="none" stroke="#FF0000" stroke-width="0.01">
-    <path d="${outline}"/>
+    <path d="${body}"/>
     <circle cx="${holeCx}" cy="${holeCy}" r="${holeR}"/>
   </g>
   <g id="grabado" fill="#000000" stroke="none">
     ${rects}
-    ${glyphs}
+    <g fill="none" stroke="#000000" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round">${glyphs}</g>
   </g>
 </svg>
 `;
 
 const qrDir = path.join(ROOT, 'qr', token);
 mkdirSync(qrDir, { recursive: true });
-const svgName = `placa-${PLACA.faceMM}mm.svg`;
+const svgName = `placa-${PLACA.bodyWmm}x${PLACA.bodyHmm}mm.svg`;
 writeFileSync(path.join(qrDir, svgName), svg);
 
 // 3. Salida para el operador.
@@ -216,12 +241,12 @@ console.log(`  Tamaño de módulo: ${moduleMM.toFixed(2)} mm\n`);
 if (moduleMM < 0.7) {
   console.log(
     `  ⚠ Módulo ${moduleMM.toFixed(2)} mm < 0.70 mm: a este tamaño el escaneo es poco\n` +
-      `    confiable en celulares de gama media. Agrandá la placa (subí faceMM).\n`
+      `    confiable en celulares de gama media. Agrandá la placa (subí bodyWmm).\n`
   );
 }
 if (textClamped) {
   console.log(
-    `  ⚠ El código se grabó a ${textH.toFixed(2)} mm (no ${PLACA.textMM} mm): con QR de ${qrAreaMM} mm\n` +
-      `    centrado en ${PLACA.faceMM} mm, el único margen libre es ${strip} mm. Subí faceMM para más altura.\n`
+    `  ⚠ El código se grabó a ${textH.toFixed(2)} mm (no ${PLACA.textMM} mm): no entra debajo\n` +
+      `    del QR. Subí bodyHmm o bajá qrTopMM para darle más lugar.\n`
   );
 }
