@@ -26,19 +26,23 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { pet } = Astro.props;
-const { nombre, raza, foto, tutor, whatsapp, nota } = pet.data;
+const { nombre, raza, foto, tutor, whatsapp, contacto2, nota } = pet.data;
 
 // The engraved tag code is the filename token, uppercased and split: a7k9x2m4 -> A7K9-X2M4.
 const codigo = `${pet.id.slice(0, 4)}-${pet.id.slice(4)}`.toUpperCase();
 
 const mensaje = encodeURIComponent(`¡Hola! Encontré a ${nombre} 🐾`);
-const whatsappHref = `https://wa.me/${whatsapp}?text=${mensaje}`;
-const telHref = `tel:+${whatsapp}`;
 
-// Human-readable phone for the tel: label. Ecuador (593) -> 0XX XXX XXXX.
-const telLabel = whatsapp.startsWith('593')
-  ? ('0' + whatsapp.slice(3)).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')
-  : `+${whatsapp}`;
+// One WhatsApp button + tel: link per person; the second contact is optional.
+const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((c) => ({
+  tutor: c.tutor,
+  whatsappHref: `https://wa.me/${c.whatsapp}?text=${mensaje}`,
+  telHref: `tel:+${c.whatsapp}`,
+  // Human-readable phone for the tel: label. Ecuador (593) -> 0XX XXX XXXX.
+  telLabel: c.whatsapp.startsWith('593')
+    ? ('0' + c.whatsapp.slice(3)).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')
+    : `+${c.whatsapp}`,
+}));
 ---
 
 <PetLayout title={`¿Encontraste a ${nombre}?`}>
@@ -101,6 +105,9 @@ const telLabel = whatsapp.startsWith('593')
       text-align: center;
       text-decoration: none;
     }
+    .contacto + .contacto {
+      margin-top: 24px;
+    }
     .nota {
       margin-top: 24px;
       padding: 14px 16px;
@@ -142,9 +149,18 @@ const telLabel = whatsapp.startsWith('593')
     <p class="raza">{raza}</p>
   </div>
 
-  <a class="btn" href={whatsappHref}>Avisar a {tutor} por WhatsApp</a>
-
-  <a class="tel" href={telHref}>o llamar al {telLabel}</a>
+  {
+    contactos.map((c) => (
+      <div class="contacto">
+        <a class="btn" href={c.whatsappHref}>
+          Avisar a {c.tutor} por WhatsApp
+        </a>
+        <a class="tel" href={c.telHref}>
+          o llamar al {c.telLabel}
+        </a>
+      </div>
+    ))
+  }
 
   {nota && <p class="nota">{nota}</p>}
 

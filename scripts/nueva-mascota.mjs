@@ -3,6 +3,7 @@
 // listo para grabado láser (medidas físicas en mm, capas corte/grabado). Uso:
 //   npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
 //     --tutor "María" --whatsapp 593999999999 --nota "Es nerviosa"
+// Segundo contacto opcional: --tutor2 "Pedro" --whatsapp2 593988888888 (van juntos).
 import { parseArgs } from 'node:util';
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -24,6 +25,8 @@ const { values } = parseArgs({
     raza: { type: 'string' },
     tutor: { type: 'string' },
     whatsapp: { type: 'string' },
+    tutor2: { type: 'string' },
+    whatsapp2: { type: 'string' },
     nota: { type: 'string' },
   },
 });
@@ -40,11 +43,23 @@ if (missing.length) {
   process.exit(1);
 }
 
-const whatsapp = values.whatsapp.replace(/\D/g, '');
-if (whatsapp.length < 8) {
-  console.error(`\nwhatsapp inválido: "${values.whatsapp}". Usa solo dígitos, con código de país.\n`);
+// Solo dígitos con código de país; mismo rango que el schema (8-15).
+function telefono(flag) {
+  const n = values[flag].replace(/\D/g, '');
+  if (n.length < 8 || n.length > 15) {
+    console.error(`\n${flag} inválido: "${values[flag]}". Usa solo dígitos, con código de país.\n`);
+    process.exit(1);
+  }
+  return n;
+}
+
+const whatsapp = telefono('whatsapp');
+
+if (!values.tutor2 !== !values.whatsapp2) {
+  console.error('\n--tutor2 y --whatsapp2 van juntos: pasa los dos o ninguno.\n');
   process.exit(1);
 }
+const whatsapp2 = values.whatsapp2 && telefono('whatsapp2');
 
 // Token único de 8 hex; reintenta si ya existe.
 let token;
@@ -61,6 +76,7 @@ foto: ${q(`/pets/${token}.jpg`)}
 tutor: ${q(values.tutor)}
 whatsapp: ${q(whatsapp)}
 `;
+if (whatsapp2) frontmatter += `contacto2:\n  tutor: ${q(values.tutor2)}\n  whatsapp: ${q(whatsapp2)}\n`;
 if (values.nota) frontmatter += `nota: ${q(values.nota)}\n`;
 frontmatter += '---\n';
 

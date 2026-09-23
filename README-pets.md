@@ -11,6 +11,18 @@ npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
 
 `--nota` es opcional. `--whatsapp` con código de país, solo dígitos.
 
+**Segundo contacto (opcional):** agrega `--tutor2 "Pedro" --whatsapp2 593988888888`. Van juntos: los dos o ninguno. En la página aparece un segundo bloque "Avisar a Pedro por WhatsApp / o llamar al…" debajo del primero.
+
+Para agregarlo a una mascota que ya existe, edita su archivo `src/content/pets/<token>.md` y suma, dentro del bloque `---`:
+
+```yaml
+contacto2:
+  tutor: 'Pedro'
+  whatsapp: '593988888888'
+```
+
+El QR no cambia: apunta a la página, no al número.
+
 El script crea el archivo de la mascota, genera los QR en `qr/<token>/` e imprime el **token**, el **código a grabar** (`A7K9-X2M4`), la **URL** y dónde va la foto. Anota el código.
 
 ### 2. Pon la foto
