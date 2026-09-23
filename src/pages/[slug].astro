@@ -58,6 +58,8 @@ const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
+      /* Photos copied by hand may not be 4:3; crop from the top to keep the face. */
+      object-position: top;
       border-radius: 14px;
       background: var(--line);
       display: block;
