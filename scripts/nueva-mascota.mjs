@@ -4,12 +4,14 @@
 //   npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
 //     --tutor "María" --whatsapp 593999999999 --nota "Es nerviosa"
 // Segundo contacto opcional: --tutor2 "Pedro" --whatsapp2 593988888888 (van juntos).
+// Foto opcional: --foto ~/Descargas/luna.png (cualquier formato; se guarda como .jpg).
 import { parseArgs } from 'node:util';
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import QRCode from 'qrcode';
+import sharp from 'sharp';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DOMAIN = 'https://pawreli.com';
@@ -28,6 +30,7 @@ const { values } = parseArgs({
     tutor2: { type: 'string' },
     whatsapp2: { type: 'string' },
     nota: { type: 'string' },
+    foto: { type: 'string' },
   },
 });
 
@@ -61,11 +64,32 @@ if (!values.tutor2 !== !values.whatsapp2) {
 }
 const whatsapp2 = values.whatsapp2 && telefono('whatsapp2');
 
+if (values.foto && !existsSync(values.foto)) {
+  console.error(`\nNo encuentro la foto: "${values.foto}".\n`);
+  process.exit(1);
+}
+
 // Token único de 8 hex; reintenta si ya existe.
 let token;
 do {
   token = randomBytes(4).toString('hex');
 } while (existsSync(path.join(ROOT, 'src/content/pets', `${token}.md`)));
+
+// 0. Foto: corrige la rotación del celular, achica a 1200 px de ancho (la página
+// la muestra a 412) y la guarda como .jpg. Antes del .md: si falla, no queda nada a medias.
+const fotoFile = path.join(ROOT, 'public/pets', `${token}.jpg`);
+if (values.foto) {
+  try {
+    await sharp(values.foto)
+      .rotate()
+      .resize({ width: 1200, withoutEnlargement: true })
+      .jpeg({ quality: 82, mozjpeg: true })
+      .toFile(fotoFile);
+  } catch (err) {
+    console.error(`\nNo pude convertir la foto "${values.foto}": ${err.message}\n`);
+    process.exit(1);
+  }
+}
 
 // 1. Archivo de la mascota. JSON.stringify da comillas dobles YAML-seguras.
 const q = (v) => JSON.stringify(v);
@@ -249,7 +273,9 @@ console.log(`  Código a grabar:  ${codigo}`);
 console.log(`  URL:              ${url}`);
 console.log(`  URL codificada:   ${urlUpper}`);
 console.log(`  Archivo:          src/content/pets/${token}.md`);
-console.log(`  Pon la foto en:   public/pets/${token}.jpg`);
+console.log(
+  values.foto ? `  Foto:             public/pets/${token}.jpg` : `  Pon la foto en:   public/pets/${token}.jpg`
+);
 console.log(`  Placa (SVG):      qr/${token}/${svgName}\n`);
 console.log(`  Lienzo:           ${canvasW} × ${canvasH} mm`);
 console.log(`  QR:               versión ${qr.version} · ${size}×${size} módulos (+${QUIET} de silencio/lado)`);

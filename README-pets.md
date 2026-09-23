@@ -11,6 +11,8 @@ npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
 
 `--nota` es opcional. `--whatsapp` con código de país, solo dígitos.
 
+**Foto (opcional):** agrega `--foto ~/Descargas/luna.png`. Acepta jpg, png o webp; el script la gira bien, la achica y la guarda como `public/pets/<token>.jpg`. Con `--foto` puedes saltarte el paso 2.
+
 **Segundo contacto (opcional):** agrega `--tutor2 "Pedro" --whatsapp2 593988888888`. Van juntos: los dos o ninguno. En la página aparece un segundo bloque "Avisar a Pedro por WhatsApp / o llamar al…" debajo del primero.
 
 Para agregarlo a una mascota que ya existe, edita su archivo `src/content/pets/<token>.md` y suma, dentro del bloque `---`:
