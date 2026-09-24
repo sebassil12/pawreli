@@ -46,6 +46,16 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['sans-serif'],
     },
+    {
+      // Rounded display face for the landing headings, consumed via `--font-baloo`.
+      provider: fontProviders.fontsource(),
+      name: 'Baloo 2',
+      cssVariable: '--font-baloo',
+      weights: ['400 800'],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
   ],
 
   integrations: [

@@ -1,133 +1,1072 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
-
-import Hero from '~/components/widgets/Hero.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Pricing from '~/components/widgets/Pricing.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import Layout from '~/layouts/Layout.astro';
+import { Font } from 'astro:assets';
 
 import { PRECIOS, whatsappLink } from '~/config/contacto';
 
 const metadata = {
-  title: 'Pawreli — Placas QR para mascotas en Cuenca',
+  title: 'Pawreli — Que pueda volver a casa',
   ignoreTitleTemplate: true,
 };
 
-// The WhatsApp button is the only call to action on the page. Each section
-// sends a different preset message so we know which product raised interest.
-const heroWhatsapp = whatsappLink('¡Hola Pawreli! Quiero una placa QR para mi mascota 🐾');
-const placaWhatsapp = whatsappLink(`¡Hola Pawreli! Me interesa la Placa QR personalizada ($${PRECIOS.placa}) 🐾`);
-const kitWhatsapp = whatsappLink(`¡Hola Pawreli! Me interesa el Kit de Bienvenida ($${PRECIOS.kit}) 🐾`);
-const cierreWhatsapp = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
+// WhatsApp is the only call to action. Each section sends a different preset
+// message so we know which part of the page raised the interest.
+const heroWa = whatsappLink('¡Hola Pawreli! Quiero una Pawreli para mi mascota 🐾');
+const placaWa = whatsappLink(`¡Hola Pawreli! Me interesa la Placa QR personalizada ($${PRECIOS.placa}) 🐾`);
+const kitWa = whatsappLink(`¡Hola Pawreli! Me interesa el Kit de Bienvenida ($${PRECIOS.kit}) 🐾`);
+const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero -->
-  <Hero
-    tagline="Cuenca, Ecuador"
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Escríbenos por WhatsApp',
-        href: heroWhatsapp,
-        target: '_blank',
-        icon: 'tabler:brand-whatsapp',
-      },
-    ]}
-    image="<img src='/placa.svg' alt='Placa QR Pawreli' class='mx-auto w-full max-w-md rounded-md' width='1024' height='576' />"
-  >
-    <Fragment slot="title">Si se pierde, que sepan cómo volver a casa</Fragment>
-    <Fragment slot="subtitle">
-      Una placa con código QR para tu perro o gato. Quien lo encuentre escanea la placa, ve su perfil y te avisa al
-      instante por WhatsApp.
-    </Fragment>
-  </Hero>
+  <Font cssVariable="--font-baloo" preload slot="head" />
 
-  <!-- Cómo funciona -->
-  <Steps
-    id="como-funciona"
-    title="Cómo funciona"
-    items={[
-      {
-        title: 'Escanea la placa',
-        description: 'Quien encuentra a tu mascota apunta la cámara al código QR grabado en la placa.',
-        icon: 'tabler:qrcode',
-      },
-      {
-        title: 'Se abre el perfil',
-        description: 'Ve la foto y el nombre de tu mascota, sin instalar nada ni crear cuentas.',
-        icon: 'tabler:paw',
-      },
-      {
-        title: 'Te avisa por WhatsApp',
-        description: 'Con un toque te escribe por WhatsApp o te llama. Vuelves a estar en contacto en segundos.',
-        icon: 'tabler:brand-whatsapp',
-      },
-    ]}
-  />
+  <div class="pw">
+    <!-- shared inline icons -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"
+      ><defs
+        ><g id="paw"
+          ><ellipse cx="42" cy="104" rx="22" ry="28"></ellipse><ellipse cx="86" cy="70" rx="24" ry="30"
+          ></ellipse><ellipse cx="134" cy="70" rx="24" ry="30"></ellipse><ellipse cx="178" cy="104" rx="22" ry="28"
+          ></ellipse><path d="M110 118c40 0 66 26 66 56 0 30-30 44-66 44s-66-14-66-44c0-30 26-56 66-56z"></path></g
+        ><g id="check"
+          ><path
+            d="M20 6L9 17l-5-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path></g
+        ><g id="heart"
+          ><path
+            d="M12 21s-7-4.35-9.5-8.5C.5 9 2 5 6 5c2.3 0 3.5 1.5 6 4 2.5-2.5 3.7-4 6-4 4 0 5.5 4 3.5 7.5C19 16.65 12 21 12 21z"
+          ></path></g
+        ><symbol id="ic-paw" viewBox="0 0 512 512" fill="currentColor"
+          ><path
+            d="M191.4,164.127c29.081-9.964,44.587-41.618,34.622-70.699c-9.952-29.072-41.6-44.592-70.686-34.626c-29.082,9.956-44.588,41.608-34.632,70.69C130.665,158.582,162.314,174.075,191.4,164.127z"
+          ></path><path
+            d="M102.394,250.767v0.01c16.706-25.815,9.316-60.286-16.484-76.986c-25.81-16.691-60.273-9.316-76.978,16.489v0.01c-16.695,25.805-9.306,60.268,16.495,76.958C51.236,283.957,85.694,276.573,102.394,250.767z"
+          ></path><path
+            d="M320.6,164.127c29.086,9.948,60.734-5.545,70.695-34.636c9.956-29.081-5.55-60.734-34.631-70.69c-29.086-9.966-60.734,5.555-70.686,34.626C276.013,122.509,291.519,154.163,320.6,164.127z"
+          ></path><path
+            d="M256,191.489c-87.976,0-185.048,121.816-156.946,208.493c27.132,83.684,111.901,49.195,156.946,49.195c45.045,0,129.813,34.489,156.945-49.195C441.048,313.305,343.976,191.489,256,191.489z"
+          ></path><path
+            d="M503.068,190.289v-0.01c-16.705-25.805-51.166-33.18-76.976-16.489c-25.801,16.7-33.19,51.171-16.486,76.986v-0.01c16.7,25.806,51.158,33.19,76.968,16.481C512.374,250.557,519.764,216.095,503.068,190.289z"
+          ></path></symbol
+        ><symbol id="ic-qr" viewBox="0 -0.09 122.88 122.88" fill="currentColor"
+          ><path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M0.18,0h44.63v44.45H0.18V0L0.18,0z M111.5,111.5h11.38v11.2H111.5V111.5L111.5,111.5z M89.63,111.48h11.38v10.67H89.63h-0.01H78.25v-21.82h11.02V89.27h11.21V67.22h11.38v10.84h10.84v11.2h-10.84v11.2h-11.21h-0.17H89.63V111.48L89.63,111.48z M55.84,89.09h11.02v-11.2H56.2v-11.2h10.66v-11.2H56.02v11.2H44.63v-11.2h11.2V22.23h11.38v33.25h11.02v11.2h10.84v-11.2h11.38v11.2H89.63v11.2H78.25v22.05H67.22v22.23H55.84V89.09L55.84,89.09z M111.31,55.48h11.38v11.2h-11.38V55.48L111.31,55.48z M22.41,55.48h11.38v11.2H22.41V55.48L22.41,55.48z M0.18,55.48h11.38v11.2H0.18V55.48L0.18,55.48z M55.84,0h11.38v11.2H55.84V0L55.84,0z M0,78.06h44.63v44.45H0V78.06L0,78.06z M10.84,88.86h22.95v22.86H10.84V88.86L10.84,88.86z M78.06,0h44.63v44.45H78.06V0L78.06,0z M88.91,10.8h22.95v22.86H88.91V10.8L88.91,10.8z M11.02,10.8h22.95v22.86H11.02V10.8L11.02,10.8z"
+          ></path></symbol
+        ><symbol id="ic-call" viewBox="0 0 24 24" fill="currentColor"
+          ><path
+            d="M14.5562 15.5477L14.1007 16.0272C14.1007 16.0272 13.0181 17.167 10.0631 14.0559C7.10812 10.9448 8.1907 9.80507 8.1907 9.80507L8.47752 9.50311C9.18407 8.75924 9.25068 7.56497 8.63424 6.6931L7.37326 4.90961C6.61028 3.8305 5.13596 3.68795 4.26145 4.60864L2.69185 6.26114C2.25823 6.71766 1.96765 7.30945 2.00289 7.96594C2.09304 9.64546 2.81071 13.259 6.81536 17.4752C11.0621 21.9462 15.0468 22.1239 16.6763 21.9631C17.1917 21.9122 17.6399 21.6343 18.0011 21.254L19.4217 19.7584C20.3806 18.7489 20.1102 17.0182 18.8833 16.312L16.9728 15.2123C16.1672 14.7486 15.1858 14.8848 14.5562 15.5477Z"
+          ></path><path
+            d="M17 12C19.7614 12 22 9.76142 22 7C22 4.23858 19.7614 2 17 2C14.2386 2 12 4.23858 12 7C12 7.79984 12.1878 8.55582 12.5217 9.22624C12.6105 9.4044 12.64 9.60803 12.5886 9.80031L12.2908 10.9133C12.1615 11.3965 12.6035 11.8385 13.0867 11.7092L14.1997 11.4114C14.392 11.36 14.5956 11.3895 14.7738 11.4783C15.4442 11.8122 16.2002 12 17 12Z"
+          ></path></symbol
+        ></defs
+      ></svg
+    >
 
-  <!-- Precios -->
-  <Pricing
-    id="precios"
-    title="Precios"
-    subtitle="Pago único, sin suscripciones."
-    prices={[
-      {
-        title: 'Placa QR',
-        subtitle: 'Personalizada para tu mascota',
-        price: PRECIOS.placa,
-        period: 'pago único',
-        items: [
-          { description: 'Código QR grabado, resistente' },
-          { description: 'Perfil web con foto y nombre' },
-          { description: 'Aviso al tutor por WhatsApp' },
-        ],
-        callToAction: {
-          text: 'Pedir por WhatsApp',
-          href: placaWhatsapp,
-          target: '_blank',
-          icon: 'tabler:brand-whatsapp',
-        },
-      },
-      {
-        title: 'Kit de Bienvenida',
-        subtitle: 'El regalo completo',
-        price: PRECIOS.kit,
-        period: 'pago único',
-        hasRibbon: true,
-        ribbonTitle: 'Regalo',
-        highlight: true,
-        items: [
-          { description: 'Placa QR personalizada' },
-          { description: 'Bandana' },
-          { description: 'Juguete' },
-          { description: 'Caja de regalo' },
-        ],
-        callToAction: {
-          text: 'Pedir por WhatsApp',
-          href: kitWhatsapp,
-          target: '_blank',
-          icon: 'tabler:brand-whatsapp',
-        },
-      },
-    ]}
-  />
+    <!-- HEADER -->
+    <header class="nav">
+      <div class="wrap">
+        <a class="logo" href="#top"
+          ><img class="mark" src="/pawreli-logo-96.webp" alt="Pawreli" width="36" height="36" />Pawreli</a
+        >
+        <nav class="links">
+          <a href="#familia">La historia</a>
+          <a href="#como">Cómo funciona</a>
+          <a href="#precio">La placa</a>
+        </nav>
+        <a class="btn terra" href={heroWa} target="_blank" rel="noopener noreferrer">Quiero una Pawreli</a>
+      </div>
+    </header>
 
-  <!-- Cierre -->
-  <CallToAction
-    id="cierre"
-    layout="banner"
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Escríbenos por WhatsApp',
-        href: cierreWhatsapp,
-        target: '_blank',
-        icon: 'tabler:brand-whatsapp',
-      },
-    ]}
-  >
-    <Fragment slot="title">Dale a tu mascota una forma de volver</Fragment>
-    <Fragment slot="subtitle">Escríbenos y coordinamos tu placa. Estamos en Cuenca.</Fragment>
-  </CallToAction>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="reveal">
+          <h1>Amor, cuidado <span>y una forma de volver a casa.</span></h1>
+          <p class="lead">
+            Una plaquita con su nombre y un código que, si algún día se pierde, le dice a quien la encuentre cómo
+            traerla contigo.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href={heroWa} target="_blank" rel="noopener noreferrer"
+              >Quiero cuidar a mi mascota <svg viewBox="0 0 24 24"><use href="#heart" fill="currentColor"></use></svg
+              ></a
+            >
+            <span class="price-hint">desde <b>${PRECIOS.placa}</b> · pago único</span>
+          </div>
+        </div>
+        <div class="heropet reveal">
+          <img
+            src="/assets/hero.webp"
+            alt="Perro saludando con la patita"
+            width="831"
+            height="906"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH VIDEO -->
+    <section class="videoband reveal">
+      <video autoplay muted loop playsinline preload="none" poster="/videos/web/running-poster.jpg">
+        <source src="/videos/web/running.webm" type="video/webm" />
+        <source src="/videos/web/running.mp4" type="video/mp4" />
+      </video>
+      <div class="shade"></div>
+      <div class="vin">
+        <h2>Que vuelva a casa.</h2>
+        <p>No podemos evitar todos los sustos. Pero sí darle una forma de volver.</p>
+      </div>
+    </section>
+
+    <!-- FAMILIA -->
+    <section class="block" id="familia">
+      <div class="wrap">
+        <div class="famcard reveal">
+          <div class="ph">
+            <img src="/assets/manada.webp" alt="Grupo de perros, la familia" width="1218" height="869" loading="lazy" />
+          </div>
+          <div>
+            <h2>Más que una mascota, un integrante de tu casa.</h2>
+            <p class="sub">
+              Por eso existe Pawreli. Para que, si algún día se pierde, tenga una forma sencilla de volver a ti.
+            </p>
+            <ul>
+              <li>
+                <span class="ic"><svg viewBox="0 0 220 230"><use href="#paw" fill="currentColor"></use></svg></span>Su
+                identidad, siempre con ella
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24"><use href="#heart" fill="currentColor"></use></svg></span
+                >Quien la encuentre te avisa al instante
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24"><use href="#check" stroke="currentColor"></use></svg></span
+                >Tranquilidad, todos los días
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOND A -->
+    <section class="block">
+      <div class="wrap">
+        <div class="bond reveal">
+          <div class="petL">
+            <img
+              src="/assets/perrito-frente-izq.webp"
+              alt="Perro tranquilo en casa"
+              width="942"
+              height="1083"
+              loading="lazy"
+            />
+          </div>
+          <div class="txt">
+            <h2>Cada Pawreli se hace para una mascota real.</h2>
+            <p>
+              No es un accesorio más. Es su identidad, pensada para acompañarla cada día y ayudarla a volver si se
+              pierde.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="block como" id="como">
+      <div class="wrap">
+        <div class="reveal">
+          <h2>Todo lo que necesita, en una plaquita.</h2>
+          <p class="intro">Pensado para que se entienda en segundos, sin apps ni complicaciones.</p>
+        </div>
+        <div class="tabsheet reveal">
+          <div class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" data-tab="0"
+              ><svg><use href="#ic-paw"></use></svg> Lleva su placa</button
+            >
+            <button role="tab" aria-selected="false" data-tab="1"
+              ><svg><use href="#ic-qr"></use></svg> La encuentran</button
+            >
+            <button role="tab" aria-selected="false" data-tab="2"
+              ><svg><use href="#ic-call"></use></svg> Te contacta</button
+            >
+          </div>
+          <div class="tabpane on" data-pane="0">
+            <div class="pic"><svg><use href="#ic-paw"></use></svg></div>
+            <div>
+              <span class="n">01</span><h3>Lleva su placa</h3><p>
+                Su patita grabada con su nombre, cómoda y resistente, todos los días.
+              </p>
+            </div>
+          </div>
+          <div class="tabpane" data-pane="1">
+            <div class="pic"><svg><use href="#ic-qr"></use></svg></div>
+            <div>
+              <span class="n">02</span><h3>Alguien la encuentra</h3><p>
+                Apunta la cámara del celular al código QR. Se abre su perfil al instante. Sin instalar nada.
+              </p>
+            </div>
+          </div>
+          <div class="tabpane" data-pane="2">
+            <div class="pic"><svg><use href="#ic-call"></use></svg></div>
+            <div>
+              <span class="n">03</span><h3>Te contacta</h3><p>
+                Te escribe por WhatsApp o te llama con un toque. Vuelven a estar juntos en segundos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOND B -->
+    <section class="block">
+      <div class="wrap">
+        <div class="bond reveal">
+          <div class="txt">
+            <h2>Un gesto de amor que la acompaña siempre.</h2>
+            <p>
+              Ligera, con su nombre grabado y hecha para el día a día, y para ayudarla a volver si algún día se pierde.
+            </p>
+          </div>
+          <div class="petL">
+            <img
+              src="/assets/perrito-perfil-arriba.webp"
+              alt="Perro mirando hacia arriba"
+              width="421"
+              height="528"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTO + PRECIO -->
+    <section class="block prod" id="precio">
+      <div class="wrap">
+        <div class="prodrow">
+          <div class="platewrap reveal">
+            <svg class="plate" viewBox="0 0 220 250" role="img" aria-label="Placa Pawreli en forma de patita">
+              <circle cx="110" cy="14" r="11" fill="none" stroke="#b8b0a2" stroke-width="4"></circle>
+              <g transform="translate(0,26)">
+                <use href="#paw" fill="#151513"></use>
+                <g fill="none" stroke="#efe9db" stroke-width="2" opacity=".85"
+                  ><ellipse cx="42" cy="104" rx="12" ry="16"></ellipse><ellipse cx="86" cy="70" rx="13" ry="17"
+                  ></ellipse><ellipse cx="134" cy="70" rx="13" ry="17"></ellipse><ellipse
+                    cx="178"
+                    cy="104"
+                    rx="12"
+                    ry="16"></ellipse></g
+                >
+                <text
+                  id="tagName"
+                  x="110"
+                  y="182"
+                  text-anchor="middle"
+                  fill="#f3efe6"
+                  font-family="Baloo 2, sans-serif"
+                  font-size="26"
+                  font-weight="800">Luna</text
+                >
+              </g>
+            </svg>
+            <div class="field">
+              <label for="nameInput">Escribe su nombre 👇</label>
+              <input id="nameInput" type="text" maxlength="11" value="Luna" />
+            </div>
+          </div>
+          <div class="reveal">
+            <h2>Elige tu Pawreli</h2>
+            <div class="prices">
+              <div class="price">
+                <p class="lz">Precio de lanzamiento</p>
+                <h3>Placa QR</h3>
+                <p class="sub">Lo esencial para que vuelva</p>
+                <p class="amt">${PRECIOS.placa} <small>pago único</small></p>
+                <ul>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Placa con su nombre</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>QR grabado resistente</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Perfil web y WhatsApp</li>
+                </ul>
+                <a
+                  class="btn pale"
+                  href={placaWa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="width:100%;justify-content:center">Pedir por WhatsApp</a
+                >
+              </div>
+              <div class="price kit">
+                <span class="ribbon">Regalo</span>
+                <p class="lz">Edición lanzamiento</p>
+                <h3>Kit Bienvenida</h3>
+                <p class="sub">El regalo completo</p>
+                <p class="amt"><span class="was">${PRECIOS.kitAntes}</span>${PRECIOS.kit} <small>único</small></p>
+                <ul>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Placa y bandana</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Juguete</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Caja de regalo</li>
+                </ul>
+                <a
+                  class="btn"
+                  href={kitWa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="width:100%;justify-content:center">Pedir por WhatsApp</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH VIDEO CIERRE -->
+    <section class="videoband reveal">
+      <video autoplay muted loop playsinline preload="none" poster="/videos/web/resting-poster.jpg">
+        <source src="/videos/web/resting.webm" type="video/webm" />
+        <source src="/videos/web/resting.mp4" type="video/mp4" />
+      </video>
+      <div class="shade"></div>
+      <div class="vin">
+        <h2>Dale una forma de volver.</h2>
+        <p>Coordinamos por WhatsApp. Estamos en Cuenca.</p>
+        <a class="btn pale" href={cierreWa} target="_blank" rel="noopener noreferrer">Quiero una Pawreli</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="pwfoot">
+      <div class="wrap">
+        <span class="logo"
+          ><img class="mark" src="/pawreli-logo-96.webp" alt="Pawreli" width="28" height="28" />Pawreli</span
+        >
+        <nav class="foot-links">
+          <a href="/terms">Términos</a>
+          <a href="/privacy">Privacidad</a>
+        </nav>
+        <p class="copy">© {new Date().getFullYear()} Pawreli · Cuenca, Ecuador</p>
+      </div>
+    </footer>
+  </div>
 </Layout>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+  html,
+  body {
+    overflow-x: clip;
+  }
+  body {
+    background: #fbf3dd;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<style>
+  .pw {
+    --cream: #fbf3dd;
+    --cream-2: #fdf8ea;
+    --paper: #fffdf6;
+    --teal: #2ea39b;
+    --teal-d: #1c6f68;
+    --terra: #b3663e;
+    --peach: #e7ba93;
+    --copper: #cc9772;
+    --ink: #3a2a1e;
+    --muted: #7c6a58;
+    --line: rgba(58, 42, 30, 0.12);
+    --display: var(--font-baloo), 'Baloo 2', system-ui, sans-serif;
+    --mono: ui-monospace, Menlo, monospace;
+    --s-1: 0.86rem;
+    --s0: 1rem;
+    --s1: 1.2rem;
+    --s2: 1.55rem;
+    --s3: clamp(1.9rem, 4vw, 2.6rem);
+    --s4: clamp(2.4rem, 6.5vw, 4.2rem);
+    --maxw: 1080px;
+    color: var(--ink);
+    font-size: var(--s0);
+    line-height: 1.6;
+  }
+  .pw :is(h1, h2, h3) {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .pw p {
+    margin: 0;
+  }
+  .pw a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .pw .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 22px;
+  }
+  .pw .muted {
+    color: var(--muted);
+  }
+
+  .pw .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--s0);
+    padding: 14px 24px;
+    border-radius: 999px;
+    border: 0;
+    cursor: pointer;
+    background: var(--teal);
+    color: #fff;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .pw .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px -12px rgba(46, 163, 155, 0.85);
+  }
+  .pw .btn.terra {
+    background: var(--terra);
+  }
+  .pw .btn.pale {
+    background: var(--paper);
+    color: var(--teal-d);
+  }
+  .pw .btn svg {
+    width: 18px;
+  }
+  .pw .btn:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .pw .nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: color-mix(in srgb, var(--cream) 86%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .pw .nav .wrap {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    height: 66px;
+  }
+  .pw .logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+  .pw .logo .mark {
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+  .pw .nav .links {
+    display: flex;
+    gap: 22px;
+    margin-left: auto;
+    font-size: var(--s-1);
+    font-weight: 600;
+  }
+  .pw .nav .links a:hover {
+    color: var(--terra);
+  }
+  .pw .nav .btn {
+    padding: 10px 18px;
+    font-size: var(--s-1);
+  }
+
+  .pw .hero .wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    align-items: center;
+    padding: 30px 22px 50px;
+  }
+  .pw .hero h1 {
+    font-size: var(--s4);
+    color: var(--terra);
+    margin-bottom: 16px;
+  }
+  .pw .hero h1 span {
+    color: var(--ink);
+  }
+  .pw .hero .lead {
+    color: var(--muted);
+    font-size: var(--s1);
+    max-width: 40ch;
+    margin-bottom: 24px;
+  }
+  .pw .heropet {
+    position: relative;
+    display: grid;
+    place-items: end center;
+    min-height: 440px;
+    padding: 10px 0;
+  }
+  .pw .heropet::before {
+    content: '';
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(360px, 84%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    z-index: 0;
+    background: radial-gradient(
+      circle at 50% 46%,
+      var(--teal) 0 44%,
+      color-mix(in srgb, var(--teal) 45%, transparent) 60%,
+      transparent 72%
+    );
+  }
+  .pw .heropet img {
+    position: relative;
+    z-index: 1;
+    max-height: 500px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 24px 22px rgba(0, 0, 0, 0.22));
+  }
+  .pw .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .pw .price-hint {
+    font-size: var(--s-1);
+    color: var(--muted);
+  }
+  .pw .price-hint b {
+    font-family: var(--display);
+    font-size: var(--s1);
+    color: var(--ink);
+  }
+
+  .pw .videoband {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    height: clamp(340px, 62vh, 560px);
+    display: grid;
+    place-items: center;
+  }
+  .pw .videoband video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pw .videoband .shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 40, 36, 0.32), rgba(20, 40, 36, 0.66));
+  }
+  .pw .videoband .vin {
+    position: relative;
+    text-align: center;
+    color: #fff;
+    max-width: 40ch;
+    padding: 22px;
+  }
+  .pw .videoband .vin h2 {
+    color: #fff;
+    font-size: var(--s4);
+  }
+  .pw .videoband .vin p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 12px;
+    font-size: var(--s1);
+  }
+  .pw .videoband .vin .btn {
+    margin-top: 20px;
+  }
+
+  .pw .block {
+    padding: 52px 0;
+  }
+
+  .pw .famcard {
+    background: var(--terra);
+    color: #fff3ec;
+    border-radius: 32px;
+    padding: 26px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .pw .famcard .ph {
+    border-radius: 22px;
+    background: var(--cream-2);
+    display: grid;
+    place-items: center;
+    padding: 10px;
+  }
+  .pw .famcard .ph img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .pw .famcard h2 {
+    color: #fff;
+    font-size: var(--s3);
+  }
+  .pw .famcard .sub {
+    color: rgba(255, 255, 255, 0.85);
+    margin: 10px 0 16px;
+  }
+  .pw .famcard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pw .famcard li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: var(--s-1);
+  }
+  .pw .famcard li .ic {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: var(--peach);
+    color: #5a2f18;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .pw .famcard li .ic svg {
+    width: 16px;
+  }
+
+  .pw .bond {
+    position: relative;
+    overflow: hidden;
+    background: var(--cream-2);
+    border-radius: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .pw .bond .petL {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 16px 12px 0;
+    min-height: 300px;
+  }
+  .pw .bond .petL img {
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: contain;
+    object-position: bottom center;
+    display: block;
+    filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.18));
+  }
+  .pw .bond .txt {
+    padding: 34px;
+    align-self: center;
+  }
+  .pw .bond h2 {
+    font-size: var(--s3);
+    color: var(--terra);
+  }
+  .pw .bond p {
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 40ch;
+  }
+
+  .pw .como h2 {
+    font-size: var(--s3);
+    color: var(--terra);
+    margin-bottom: 6px;
+  }
+  .pw .como .intro {
+    color: var(--muted);
+    margin-bottom: 20px;
+    max-width: 46ch;
+  }
+  .pw .tabsheet {
+    background: var(--teal-d);
+    border-radius: 30px;
+    padding: 8px;
+  }
+  .pw .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 8px;
+  }
+  .pw .tabs button {
+    flex: 1;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--s-1);
+    color: #cdeae6;
+    background: transparent;
+    border: 0;
+    border-radius: 18px;
+    padding: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .pw .tabs button svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: currentColor;
+  }
+  .pw .tabs button[aria-selected='true'] {
+    background: var(--teal);
+    color: #fff;
+  }
+  .pw .tabpane {
+    background: var(--teal);
+    border-radius: 24px;
+    padding: 26px;
+    display: none;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 22px;
+    align-items: center;
+    color: #eafaf7;
+  }
+  .pw .tabpane.on {
+    display: grid;
+  }
+  .pw .tabpane .pic {
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    display: grid;
+    place-items: center;
+    min-height: 130px;
+  }
+  .pw .tabpane .pic svg {
+    width: 52px;
+    height: 52px;
+    color: #eafaf7;
+  }
+  .pw .tabpane h3 {
+    color: #fff;
+    font-size: var(--s2);
+  }
+  .pw .tabpane p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 10px 0 0;
+    font-size: var(--s-1);
+  }
+  .pw .tabpane .n {
+    font-family: var(--mono);
+    font-size: var(--s-1);
+    color: #bfe6e0;
+  }
+
+  .pw .prod {
+    position: relative;
+    overflow: hidden;
+  }
+  .pw .prodrow {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  .pw .platewrap {
+    position: relative;
+    justify-self: center;
+    text-align: center;
+    padding: 20px;
+    background: radial-gradient(
+      circle at 50% 42%,
+      color-mix(in srgb, var(--peach) 32%, transparent) 0 40%,
+      transparent 66%
+    );
+  }
+  .pw .plate {
+    position: relative;
+    z-index: 1;
+    width: 180px;
+  }
+  .pw .field label {
+    font-family: var(--font-inter), sans-serif;
+    font-size: var(--s-1);
+    color: var(--muted);
+    display: block;
+    margin: 14px 0 8px;
+  }
+  .pw .field input {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 260px;
+    font: inherit;
+    padding: 11px 15px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .pw .field input:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 1px;
+  }
+  .pw .prod h2 {
+    font-size: var(--s3);
+    color: var(--terra);
+    margin-bottom: 6px;
+  }
+  .pw .prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .pw .price {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 22px;
+    position: relative;
+  }
+  .pw .price.kit {
+    background: var(--cream-2);
+    border: 2px solid var(--teal);
+  }
+  .pw .ribbon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--terra);
+    color: #fff;
+    font-family: var(--font-inter), sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pw .price h3 {
+    font-size: var(--s1);
+    color: var(--terra);
+  }
+  .pw .price .sub {
+    color: var(--muted);
+    font-size: var(--s-1);
+    margin: 4px 0 12px;
+  }
+  .pw .price .lz {
+    font-family: var(--font-inter), sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+  }
+  .pw .price .amt {
+    font-family: var(--display);
+    font-size: 2.7rem;
+    line-height: 1;
+  }
+  .pw .price .amt .was {
+    font-size: 1rem;
+    font-family: var(--font-inter), sans-serif;
+    color: var(--muted);
+    text-decoration: line-through;
+    margin-right: 8px;
+  }
+  .pw .price .amt small {
+    font-size: 0.8rem;
+    font-family: var(--font-inter), sans-serif;
+    color: var(--muted);
+  }
+  .pw .price ul {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: var(--s-1);
+    color: var(--muted);
+  }
+  .pw .price li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+  }
+  .pw .price li svg {
+    width: 16px;
+    flex: none;
+    margin-top: 3px;
+    fill: var(--teal);
+  }
+
+  .pw .pwfoot {
+    border-top: 1px solid var(--line);
+    margin-top: 20px;
+  }
+  .pw .pwfoot .wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    padding-bottom: 30px;
+  }
+  .pw .pwfoot .logo {
+    font-size: 1.1rem;
+  }
+  .pw .pwfoot .logo .mark {
+    width: 28px;
+    height: 28px;
+  }
+  .pw .pwfoot .foot-links {
+    display: flex;
+    gap: 16px;
+    font-size: var(--s-1);
+    color: var(--muted);
+  }
+  .pw .pwfoot .foot-links a:hover {
+    color: var(--terra);
+  }
+  .pw .pwfoot .copy {
+    margin-left: auto;
+    font-size: var(--s-1);
+    color: var(--muted);
+  }
+
+  .pw .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+  .pw .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 820px) {
+    .pw .hero .wrap,
+    .pw .famcard,
+    .pw .tabpane,
+    .pw .prodrow,
+    .pw .prices,
+    .pw .bond {
+      grid-template-columns: 1fr;
+    }
+    .pw .nav .links {
+      display: none;
+    }
+    .pw .heropet {
+      min-height: 300px;
+    }
+    .pw .bond .petL {
+      min-height: 220px;
+      padding-top: 10px;
+    }
+    .pw .bond .petL img {
+      max-height: 300px;
+      width: 78%;
+    }
+    .pw .bond .txt {
+      padding: 22px 24px 6px;
+    }
+    .pw .pwfoot .copy {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pw .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const input = document.getElementById('nameInput') as HTMLInputElement | null;
+  const tag = document.getElementById('tagName');
+  if (input && tag) input.addEventListener('input', () => (tag.textContent = input.value.trim() || 'Luna'));
+
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.tabs button'));
+  tabs.forEach((b) =>
+    b.addEventListener('click', () => {
+      tabs.forEach((x) => x.setAttribute('aria-selected', 'false'));
+      b.setAttribute('aria-selected', 'true');
+      const i = b.getAttribute('data-tab');
+      document
+        .querySelectorAll<HTMLElement>('.tabpane')
+        .forEach((p) => p.classList.toggle('on', p.getAttribute('data-pane') === i));
+    })
+  );
+
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12 }
+    );
+    reveals.forEach((el) => io.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add('in'));
+  }
+</script>
