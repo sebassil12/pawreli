@@ -34,3 +34,6 @@ pnpm-workspace.yaml
 
 # QR files for the engraver (not part of the site)
 qr/
+
+# Original heavy media (source only); optimized versions live under public/
+media-src/
