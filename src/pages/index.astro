@@ -76,8 +76,8 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
         >
         <nav class="links">
           <a href="#familia">La historia</a>
-          <a href="#como">Cómo funciona</a>
-          <a href="#precio">La placa</a>
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#precios">La placa</a>
         </nav>
         <a class="btn terra" href={heroWa} target="_blank" rel="noopener noreferrer">Quiero una Pawreli</a>
       </div>
@@ -182,7 +182,7 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
     </section>
 
     <!-- COMO FUNCIONA -->
-    <section class="block como" id="como">
+    <section class="block como" id="como-funciona">
       <div class="wrap">
         <div class="reveal">
           <h2>Todo lo que necesita, en una plaquita.</h2>
@@ -252,7 +252,7 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
     </section>
 
     <!-- PRODUCTO + PRECIO -->
-    <section class="block prod" id="precio">
+    <section class="block prod" id="precios">
       <div class="wrap">
         <div class="prodrow">
           <div class="platewrap reveal">
@@ -362,20 +362,13 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
 </Layout>
 
 <style is:global>
-  html {
-    scroll-behavior: smooth;
-  }
-  html,
+  /* Clip on body (not html) so the full-width video can't add a horizontal
+     scrollbar, while html stays the vertical scroller and sticky/anchors work.
+     Smooth scrolling for the nav is done in JS (rAF), not CSS scroll-behavior,
+     which is unreliable with scrollIntoView on this video-heavy page. */
   body {
     overflow-x: clip;
-  }
-  body {
     background: #fbf3dd;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
   }
 </style>
 
@@ -620,6 +613,9 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
 
   .pw .block {
     padding: 52px 0;
+  }
+  .pw section[id] {
+    scroll-margin-top: 84px;
   }
 
   .pw .famcard {
@@ -1037,6 +1033,31 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
 </style>
 
 <script>
+  // In-page anchor nav. The ClientRouter (view transitions) swallows same-page
+  // hash clicks, and CSS `scroll-behavior: smooth` + scrollIntoView proved
+  // unreliable on this video-heavy page, so we scroll to the target ourselves.
+  // 84px offsets the sticky header; `behavior: smooth` enhances where supported
+  // and falls back to an instant jump otherwise.
+  const HEADER = 84;
+  const scrollToHash = (hash: string) => {
+    const el = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+    if (!el) return false;
+    const targetY = Math.max(0, el.getBoundingClientRect().top + window.scrollY - HEADER);
+    window.scrollTo(0, targetY);
+    return true;
+  };
+  document.querySelectorAll<HTMLAnchorElement>('.pw a[href^="#"]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      const hash = a.getAttribute('href') || '';
+      if (hash.length > 1 && scrollToHash(hash)) {
+        e.preventDefault();
+        history.pushState(null, '', hash);
+      }
+    })
+  );
+  // Re-apply the header offset when landing on a deep link (e.g. /#precios).
+  if (location.hash) setTimeout(() => scrollToHash(location.hash), 60);
+
   const input = document.getElementById('nameInput') as HTMLInputElement | null;
   const tag = document.getElementById('tagName');
   if (input && tag) input.addEventListener('input', () => (tag.textContent = input.value.trim() || 'Luna'));
