@@ -5,16 +5,16 @@ import { Font } from 'astro:assets';
 import { PRECIOS, whatsappLink } from '~/config/contacto';
 
 const metadata = {
-  title: 'Pawreli — Que pueda volver a casa',
+  title: 'Pawreli',
   ignoreTitleTemplate: true,
 };
 
 // WhatsApp is the only call to action. Each section sends a different preset
 // message so we know which part of the page raised the interest.
-const heroWa = whatsappLink('¡Hola Pawreli! Quiero una Pawreli para mi mascota 🐾');
-const placaWa = whatsappLink(`¡Hola Pawreli! Me interesa la Placa QR personalizada ($${PRECIOS.placa}) 🐾`);
-const kitWa = whatsappLink(`¡Hola Pawreli! Me interesa el Kit de Bienvenida ($${PRECIOS.kit}) 🐾`);
-const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
+const heroWa = whatsappLink('¡Hola Pawreli! Quiero una Pawreli para mi mascota');
+const placaWa = whatsappLink(`¡Hola Pawreli! Me interesa la Placa QR personalizada ($${PRECIOS.placa})`);
+const packDobleWa = whatsappLink(`¡Hola Pawreli! Me interesa el Pack Doble ($${PRECIOS.packDoble})`);
+const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa');
 ---
 
 <Layout metadata={metadata}>
@@ -75,7 +75,6 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
           ><img class="mark" src="/pawreli-logo-96.webp" alt="Pawreli" width="36" height="36" />Pawreli</a
         >
         <nav class="links">
-          <a href="#familia">La historia</a>
           <a href="#como-funciona">Cómo funciona</a>
           <a href="#precios">La placa</a>
         </nav>
@@ -126,62 +125,7 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
       </div>
     </section>
 
-    <!-- FAMILIA -->
-    <section class="block" id="familia">
-      <div class="wrap">
-        <div class="famcard reveal">
-          <div class="ph">
-            <img src="/assets/manada.webp" alt="Grupo de perros, la familia" width="1218" height="869" loading="lazy" />
-          </div>
-          <div>
-            <h2>Más que una mascota, un integrante de tu casa.</h2>
-            <p class="sub">
-              Por eso existe Pawreli. Para que, si algún día se pierde, tenga una forma sencilla de volver a ti.
-            </p>
-            <ul>
-              <li>
-                <span class="ic"><svg viewBox="0 0 220 230"><use href="#paw" fill="currentColor"></use></svg></span>Su
-                identidad, siempre con ella
-              </li>
-              <li>
-                <span class="ic"><svg viewBox="0 0 24 24"><use href="#heart" fill="currentColor"></use></svg></span
-                >Quien la encuentre te avisa al instante
-              </li>
-              <li>
-                <span class="ic"><svg viewBox="0 0 24 24"><use href="#check" stroke="currentColor"></use></svg></span
-                >Tranquilidad, todos los días
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BOND A -->
-    <section class="block">
-      <div class="wrap">
-        <div class="bond reveal">
-          <div class="petL">
-            <img
-              src="/assets/perrito-frente-izq.webp"
-              alt="Perro tranquilo en casa"
-              width="942"
-              height="1083"
-              loading="lazy"
-            />
-          </div>
-          <div class="txt">
-            <h2>Cada Pawreli se hace para una mascota real.</h2>
-            <p>
-              No es un accesorio más. Es su identidad, pensada para acompañarla cada día y ayudarla a volver si se
-              pierde.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMO FUNCIONA -->
+     <!-- COMO FUNCIONA -->
     <section class="block como" id="como-funciona">
       <div class="wrap">
         <div class="reveal">
@@ -228,35 +172,12 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
       </div>
     </section>
 
-    <!-- BOND B -->
-    <section class="block">
-      <div class="wrap">
-        <div class="bond reveal">
-          <div class="txt">
-            <h2>Un gesto de amor que la acompaña siempre.</h2>
-            <p>
-              Ligera, con su nombre grabado y hecha para el día a día, y para ayudarla a volver si algún día se pierde.
-            </p>
-          </div>
-          <div class="petL">
-            <img
-              src="/assets/perrito-perfil-arriba.webp"
-              alt="Perro mirando hacia arriba"
-              width="421"
-              height="528"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRODUCTO + PRECIO -->
+       <!-- PRODUCTO + PRECIO -->
     <section class="block prod" id="precios">
       <div class="wrap">
         <div class="prodrow">
           <div class="platewrap reveal">
-            <svg class="plate" viewBox="0 0 220 250" role="img" aria-label="Placa Pawreli en forma de patita">
+            <svg class="plate" style="display: block; margin: 0 auto;" viewBox="0 0 220 250" role="img" aria-label="Placa Pawreli en forma de patita">
               <circle cx="110" cy="14" r="11" fill="none" stroke="#b8b0a2" stroke-width="4"></circle>
               <g transform="translate(0,26)">
                 <use href="#paw" fill="#151513"></use>
@@ -307,29 +228,61 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa 🐾');
                 >
               </div>
               <div class="price kit">
-                <span class="ribbon">Regalo</span>
-                <p class="lz">Edición lanzamiento</p>
-                <h3>Kit Bienvenida</h3>
-                <p class="sub">El regalo completo</p>
-                <p class="amt"><span class="was">${PRECIOS.kitAntes}</span>${PRECIOS.kit} <small>único</small></p>
+                <span class="ribbon">Trending</span>
+                <p class="lz">Para 2 mascotas</p>
+                <h3>Pack Doble</h3>
+                <p class="sub">Protege a ambos peludos</p>
+                <!-- Eliminado el precio tachado (<span class="was">) por la regla de no usar descuentos falsos -->
+                <p class="amt">${PRECIOS.packDoble} <small>pago único</small></p>
                 <ul>
-                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Placa y bandana</li>
-                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Juguete</li>
-                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Caja de regalo</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>2 Placas personalizadas</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>2 Perfiles digitales con QR</li>
+                  <li><svg viewBox="0 0 24 24"><use href="#check"></use></svg>Contacto directo por WhatsApp</li>
                 </ul>
                 <a
                   class="btn"
-                  href={kitWa}
+                  href={packDobleWa}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style="width:100%;justify-content:center">Pedir por WhatsApp</a
-                >
+                  style="width:100%;justify-content:center">Pedir Pack Doble</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- FAMILIA -->
+    <section class="block" id="familia">
+      <div class="wrap">
+        <div class="famcard reveal">
+          <div class="ph">
+            <img src="/assets/manada.webp" alt="Grupo de perros, la familia" width="1218" height="869" loading="lazy" />
+          </div>
+          <div>
+            <h2>Más que una mascota, un integrante de tu casa.</h2>
+            <p class="sub">
+              Por eso existe Pawreli. Para que, si algún día se pierde, tenga una forma sencilla de volver a ti.
+            </p>
+            <ul>
+              <li>
+                <span class="ic"><svg viewBox="0 0 220 230"><use href="#paw" fill="currentColor"></use></svg></span>Su
+                identidad, siempre con ella
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24"><use href="#heart" fill="currentColor"></use></svg></span
+                >Quien la encuentre te avisa al instante
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24"><use href="#check" stroke="currentColor"></use></svg></span
+                >Tranquilidad, todos los días
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+ 
 
     <!-- FULL-WIDTH VIDEO CIERRE -->
     <section class="videoband reveal">

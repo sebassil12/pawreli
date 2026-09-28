@@ -8,7 +8,7 @@ export const WHATSAPP = '593987838130';
 export const PRECIOS = {
   placa: 10,
   placaAntes: 15,
-  kit: 18,
+  packDoble: 18,
   kitAntes: 32,
 } as const;
 
