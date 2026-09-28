@@ -3,20 +3,20 @@ title: 'Política de Privacidad'
 layout: '~/layouts/MarkdownLayout.astro'
 ---
 
-En Pawreli ([NOMBRE]) tratamos los datos que nos compartes con el único fin de crear la placa QR de tu mascota y su perfil.
+En Pawreli tratamos los datos que nos compartes con el único fin de crear la placa de identificación de tu mascota y su perfil digital de contacto.
 
-## Qué datos usamos
+## Qué datos recopilamos
 
-Para cada placa guardamos el nombre y la foto de la mascota y un número de contacto (WhatsApp o teléfono) del tutor. No pedimos ni almacenamos dirección, apellidos ni correo del tutor en el perfil público.
+Para habilitar el perfil guardamos únicamente la información necesaria para el contacto: el nombre y fotografía de la mascota, y un número de contacto (teléfono o enlace a WhatsApp) provisto por el tutor. No solicitamos ni almacenamos tu dirección domiciliaria, apellidos completos ni datos financieros dentro del perfil accesible por el QR.
 
-## Para qué los usamos
+## Finalidad del tratamiento
 
-Esos datos aparecen en la página de perfil que se abre al escanear la placa, para que quien encuentre a tu mascota pueda avisarte. No los vendemos ni los compartimos con terceros.
+Estos datos se muestran exclusivamente en la página web vinculada a la placa, con el único objetivo de que la persona que encuentre a tu mascota de forma física pueda comunicarse contigo de manera directa. No comercializamos, alquilamos ni transferimos tu información a terceros.
 
-## El perfil público
+## Visibilidad y control de tu información
 
-La página de perfil no se indexa en buscadores y solo es accesible con el código de la placa. Puedes pedirnos en cualquier momento que actualicemos o eliminemos la información de tu mascota.
+El perfil digital está diseñado para consulta directa y cuenta con directivas para evitar su indexación en motores de búsqueda públicos. En cumplimiento con la normativa de protección de datos personales, puedes solicitar en cualquier momento la actualización, rectificación o eliminación definitiva de los datos y del perfil de tu mascota.
 
 ## Contacto
 
-Para cualquier duda sobre tus datos, escríbenos a [EMAIL].
+Para ejercer tus derechos de acceso, rectificación o eliminación de información, escríbenos a pawreli7@gmail.com o contáctanos directamente por nuestro canal oficial de WhatsApp.
