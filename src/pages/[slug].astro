@@ -26,7 +26,17 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { pet } = Astro.props;
-const { nombre, raza, foto, tutor, whatsapp, contacto2, nota } = pet.data;
+const { nombre, raza, foto, tutor, whatsapp, contacto2, nota, photoWidth, photoHeight, photoColor, photoFocus } =
+  pet.data;
+
+// Fixed 4:5 frame keeps the WhatsApp button in the same place for every pet. By default the
+// photo is contained (whole pet visible) over its own dominant color; photoFocus opts into a crop.
+const photoStyle = [
+  photoColor && `background:${photoColor}`,
+  photoFocus && `object-fit:cover;object-position:${photoFocus}`,
+]
+  .filter(Boolean)
+  .join(';');
 
 // The engraved tag code is the filename token, uppercased and split: a7k9x2m4 -> A7K9-X2M4.
 const codigo = `${pet.id.slice(0, 4)}-${pet.id.slice(4)}`.toUpperCase();
@@ -56,9 +66,10 @@ const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((
     }
     .foto {
       width: 100%;
+      /* The height attribute (real photo size) must not override the 4:5 frame. */
+      height: auto;
       aspect-ratio: 4 / 5;
-      object-fit: cover;
-      object-position: center;
+      object-fit: contain;
       border-radius: 14px;
       background: var(--line);
       display: block;
@@ -143,7 +154,15 @@ const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((
 
   <h1>¿Encontraste a {nombre}?</h1>
 
-  <img class="foto" src={foto} alt={nombre} width="412" height="515" decoding="async" />
+  <img
+    class="foto"
+    src={foto}
+    alt={nombre}
+    width={photoWidth ?? 412}
+    height={photoHeight ?? 515}
+    style={photoStyle || undefined}
+    decoding="async"
+  />
 
   <div class="datos">
     <p class="nombre">{nombre}</p>

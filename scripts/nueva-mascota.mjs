@@ -5,13 +5,14 @@
 //     --tutor "María" --whatsapp 593999999999 --nota "Es nerviosa"
 // Segundo contacto opcional: --tutor2 "Pedro" --whatsapp2 593988888888 (van juntos).
 // Foto opcional: --foto ~/Descargas/luna.png (cualquier formato; se guarda como .jpg).
+// Optional manual framing (crops in CSS only, the file stays whole): --focus "50% 30%".
 import { parseArgs } from 'node:util';
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import QRCode from 'qrcode';
-import sharp from 'sharp';
+import { processPetPhoto } from './lib/pet-photo.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DOMAIN = 'https://pawreli.com';
@@ -31,6 +32,7 @@ const { values } = parseArgs({
     whatsapp2: { type: 'string' },
     nota: { type: 'string' },
     foto: { type: 'string' },
+    focus: { type: 'string' },
   },
 });
 
@@ -75,21 +77,25 @@ do {
   token = randomBytes(4).toString('hex');
 } while (existsSync(path.join(ROOT, 'src/content/pets', `${token}.md`)));
 
-// 0. Foto: corrige la rotación del celular y la deja en 4:5 a 960×1200 (el marco
-// vertical ideal para móvil). Centra el encuadre para conservar orejas, hocico
-// y pecho. Se guarda como .jpg antes del .md: si falla, no queda nada a medias.
+// Validated here because it ends up inside a style attribute on the public page.
+const FOCUS = /^\d{1,3}% \d{1,3}%$/;
+if (values.focus && (!values.foto || !FOCUS.test(values.focus))) {
+  console.error('\n--focus requiere --foto y el formato "X% Y%", p. ej. "50% 30%".\n');
+  process.exit(1);
+}
+
+// 0. Photo: kept whole (no crop) so the full pet is visible; see scripts/lib/pet-photo.mjs.
+// Saved before the .md: if it fails, nothing is left half-written.
 const fotoFile = path.join(ROOT, 'public/pets', `${token}.jpg`);
+let photo;
 if (values.foto) {
   try {
-    await sharp(values.foto)
-      .rotate()
-      .resize({ width: 960, height: 1200, fit: 'cover', position: 'center' })
-      .jpeg({ quality: 84, mozjpeg: true })
-      .toFile(fotoFile);
+    photo = await processPetPhoto(values.foto, fotoFile);
   } catch (err) {
     console.error(`\nNo pude convertir la foto "${values.foto}": ${err.message}\n`);
     process.exit(1);
   }
+  for (const warning of photo.warnings) console.warn(`⚠ ${warning}`);
 }
 
 // 1. Archivo de la mascota. JSON.stringify da comillas dobles YAML-seguras.
@@ -103,6 +109,8 @@ whatsapp: ${q(whatsapp)}
 `;
 if (whatsapp2) frontmatter += `contacto2:\n  tutor: ${q(values.tutor2)}\n  whatsapp: ${q(whatsapp2)}\n`;
 if (values.nota) frontmatter += `nota: ${q(values.nota)}\n`;
+if (photo) frontmatter += `photoWidth: ${photo.width}\nphotoHeight: ${photo.height}\nphotoColor: ${q(photo.color)}\n`;
+if (values.focus) frontmatter += `photoFocus: ${q(values.focus)}\n`;
 frontmatter += '---\n';
 
 const petFile = path.join(ROOT, 'src/content/pets', `${token}.md`);

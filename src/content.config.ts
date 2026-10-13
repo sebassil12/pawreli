@@ -21,6 +21,18 @@ const petsCollection = defineCollection({
     /** Optional second person to reach. Name and number go together or not at all. */
     contacto2: z.object({ tutor: z.string(), whatsapp: telefono }).optional(),
     nota: z.string().optional(),
+    /** Stored photo size and dominant color, written by `nueva-mascota`; older pets lack them. */
+    photoWidth: z.number().int().positive().optional(),
+    photoHeight: z.number().int().positive().optional(),
+    photoColor: z
+      .string()
+      .regex(/^#[0-9a-f]{6}$/)
+      .optional(),
+    /** Opt-in CSS crop focus ("X% Y%"). Regex-guarded: it is rendered inside a style attribute. */
+    photoFocus: z
+      .string()
+      .regex(/^\d{1,3}% \d{1,3}%$/)
+      .optional(),
   }),
 });
 
