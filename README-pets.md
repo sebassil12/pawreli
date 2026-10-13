@@ -27,9 +27,33 @@ El QR no cambia: apunta a la página, no al número.
 
 El script crea el archivo de la mascota, genera los QR en `qr/<token>/` e imprime el **token**, el **código a grabar** (`A7K9-X2M4`), la **URL** y dónde va la foto. Anota el código.
 
-### 2. Pon la foto
+### 2. Pon y optimiza la foto (ImageMagick)
 
-Copia la foto a `public/pets/<token>.jpg` (el token que imprimió el script). Debe ser `.jpg` y coincidir con el nombre.
+Si no pasaste `--foto` en el paso 1, convierte y optimiza la imagen antes de subirla. El perfil de la mascota se abre en la calle desde un celular (frecuentemente con mala cobertura 3G), por lo que la imagen debe ser liviana, tener ratio 4:3 (1200×900) y estar libre de metadatos GPS/EXIF.
+
+Ejecuta con **ImageMagick** (v7 `magick` o v6 `convert`):
+
+```bash
+magick ~/Descargas/foto-original.jpg \
+  -auto-orient \
+  -gravity North \
+  -resize 1200x900^ \
+  -extent 1200x900 \
+  -strip \
+  -quality 82 \
+  -interlace Plane \
+  public/pets/<token>.jpg
+```
+
+*(En ImageMagick 6 reemplaza `magick` por `convert`).*
+
+**¿Por qué estos parámetros?**
+- `-auto-orient`: corrige la orientación del celular según el sensor EXIF antes de cortar.
+- `-gravity North`: ancla el recorte arriba (la cara de la mascota suele estar en la parte superior; recortar al centro la corta).
+- `-resize 1200x900^ -extent 1200x900`: ajusta al ratio 4:3 exacto a resolución retina (3x para los 412 px del contenedor móvil) sin distorsionar.
+- `-strip`: remueve metadatos EXIF, miniaturas y geolocalización GPS (privacidad del tutor y ahorro crítico de KB).
+- `-quality 82`: compresión óptima sin pérdida visible de detalle (mismo perfil que usa `sharp` en el script).
+- `-interlace Plane`: genera un JPEG progresivo para renderizado gradual en redes lentas.
 
 ### 3. Publica
 
