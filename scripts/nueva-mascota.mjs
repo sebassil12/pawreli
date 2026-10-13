@@ -75,17 +75,16 @@ do {
   token = randomBytes(4).toString('hex');
 } while (existsSync(path.join(ROOT, 'src/content/pets', `${token}.md`)));
 
-// 0. Foto: corrige la rotación del celular y la deja en 4:3 a 1200×900 (el marco
-// exacto de la página, que la muestra a 412 px). Recorta anclado arriba: en fotos
-// verticales la cara suele estar arriba y el centro la cortaba. Se guarda como .jpg
-// antes del .md: si falla, no queda nada a medias.
+// 0. Foto: corrige la rotación del celular y la deja en 4:5 a 960×1200 (el marco
+// vertical ideal para móvil). Centra el encuadre para conservar orejas, hocico
+// y pecho. Se guarda como .jpg antes del .md: si falla, no queda nada a medias.
 const fotoFile = path.join(ROOT, 'public/pets', `${token}.jpg`);
 if (values.foto) {
   try {
     await sharp(values.foto)
       .rotate()
-      .resize({ width: 1200, height: 900, fit: 'cover', position: 'north' })
-      .jpeg({ quality: 82, mozjpeg: true })
+      .resize({ width: 960, height: 1200, fit: 'cover', position: 'center' })
+      .jpeg({ quality: 84, mozjpeg: true })
       .toFile(fotoFile);
   } catch (err) {
     console.error(`\nNo pude convertir la foto "${values.foto}": ${err.message}\n`);

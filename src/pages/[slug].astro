@@ -56,10 +56,9 @@ const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((
     }
     .foto {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 4 / 5;
       object-fit: cover;
-      /* Photos copied by hand may not be 4:3; crop from the top to keep the face. */
-      object-position: top;
+      object-position: center;
       border-radius: 14px;
       background: var(--line);
       display: block;
@@ -144,7 +143,7 @@ const contactos = [{ tutor, whatsapp }, ...(contacto2 ? [contacto2] : [])].map((
 
   <h1>¿Encontraste a {nombre}?</h1>
 
-  <img class="foto" src={foto} alt={nombre} width="412" height="309" decoding="async" />
+  <img class="foto" src={foto} alt={nombre} width="412" height="515" decoding="async" />
 
   <div class="datos">
     <p class="nombre">{nombre}</p>

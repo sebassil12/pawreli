@@ -11,7 +11,7 @@ npm run nueva-mascota -- --nombre "Luna" --raza "Golden Retriever" \
 
 `--nota` es opcional. `--whatsapp` con código de país, solo dígitos.
 
-**Foto (opcional):** agrega `--foto ~/Descargas/luna.png`. Acepta jpg, png o webp; el script la gira bien, la recorta a 4:3 (1200×900, anclada arriba para no cortar la cara) y la guarda como `public/pets/<token>.jpg`. Con `--foto` puedes saltarte el paso 2.
+**Foto (opcional):** agrega `--foto ~/Descargas/luna.png`. Acepta jpg, png o webp; el script la gira bien, la recorta a formato vertical 4:5 (960×1200, centrada para conservar orejas, cara y pecho) y la guarda como `public/pets/<token>.jpg`. Con `--foto` puedes saltarte el paso 2.
 
 **Segundo contacto (opcional):** agrega `--tutor2 "Pedro" --whatsapp2 593988888888`. Van juntos: los dos o ninguno. En la página aparece un segundo bloque "Avisar a Pedro por WhatsApp / o llamar al…" debajo del primero.
 
@@ -29,18 +29,18 @@ El script crea el archivo de la mascota, genera los QR en `qr/<token>/` e imprim
 
 ### 2. Pon y optimiza la foto (ImageMagick)
 
-Si no pasaste `--foto` en el paso 1, convierte y optimiza la imagen antes de subirla. El perfil de la mascota se abre en la calle desde un celular (frecuentemente con mala cobertura 3G), por lo que la imagen debe ser liviana, tener ratio 4:3 (1200×900) y estar libre de metadatos GPS/EXIF.
+Si no pasaste `--foto` en el paso 1, convierte y optimiza la imagen antes de subirla. El perfil de la mascota se abre en la calle desde un celular (frecuentemente con mala cobertura 3G), por lo que la imagen debe ser liviana, tener ratio vertical **4:5 (960×1200)** para mostrar la cara y el pecho completos, y estar libre de metadatos GPS/EXIF.
 
 Ejecuta con **ImageMagick** (v7 `magick` o v6 `convert`):
 
 ```bash
 magick ~/Descargas/foto-original.jpg \
   -auto-orient \
-  -gravity North \
-  -resize 1200x900^ \
-  -extent 1200x900 \
+  -gravity Center \
+  -resize 960x1200^ \
+  -extent 960x1200 \
   -strip \
-  -quality 82 \
+  -quality 84 \
   -interlace Plane \
   public/pets/<token>.jpg
 ```
@@ -49,10 +49,10 @@ magick ~/Descargas/foto-original.jpg \
 
 **¿Por qué estos parámetros?**
 - `-auto-orient`: corrige la orientación del celular según el sensor EXIF antes de cortar.
-- `-gravity North`: ancla el recorte arriba (la cara de la mascota suele estar en la parte superior; recortar al centro la corta).
-- `-resize 1200x900^ -extent 1200x900`: ajusta al ratio 4:3 exacto a resolución retina (3x para los 412 px del contenedor móvil) sin distorsionar.
+- `-gravity Center`: centra el encuadre (captura orejas, ojos, hocico, lengua y pecho de la mascota).
+- `-resize 960x1200^ -extent 960x1200`: ajusta al ratio vertical 4:5 óptimo para pantallas móviles sin distorsionar.
 - `-strip`: remueve metadatos EXIF, miniaturas y geolocalización GPS (privacidad del tutor y ahorro crítico de KB).
-- `-quality 82`: compresión óptima sin pérdida visible de detalle (mismo perfil que usa `sharp` en el script).
+- `-quality 84`: compresión limpia sin pérdida visible de detalle (mismo perfil que usa `sharp` en el script).
 - `-interlace Plane`: genera un JPEG progresivo para renderizado gradual en redes lentas.
 
 ### 3. Publica
