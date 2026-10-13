@@ -113,6 +113,10 @@ Fonts are handled by Astro's native **Fonts API**, configured in `astro.config.t
 
 Astro's native CSP is intentionally **not** enabled in this version: it is incompatible with `<ClientRouter />` view transitions (shipped on by default) and would break the arbitrary third-party scripts a template user typically adds. CSP is deferred to AstroWind v2, where the component model (and optional SSR) make it clean and opt-in.
 
+## Code Language
+
+All code is written in English: scripts, file names of new modules, functions, variables, types, CLI flags and code comments. User-facing copy (page text, operator messages printed by scripts, content data) stays in Spanish. Existing Spanish identifiers (e.g. `nueva-mascota`, `nombre`, `PRECIOS`) are legacy: rename only in a dedicated change, never mixed into unrelated work.
+
 ## Verification Checklist
 
 After changes, always verify:
