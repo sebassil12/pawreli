@@ -21,7 +21,7 @@
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w .",
-    "test": "node --test scripts/lib/pet-photo.test.mjs"
+    "test": "node --test scripts/lib/pet-photo.test.mjs src/utils/referral.test.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

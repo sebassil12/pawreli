@@ -97,6 +97,7 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa');
               ></a
             >
             <span class="price-hint">desde <b>${PRECIOS.placa}</b> · pago único</span>
+            <a class="demo-link" href="/a7k9x2m4">Mira un perfil de ejemplo →</a>
           </div>
         </div>
         <div class="heropet reveal">
@@ -521,6 +522,11 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa');
     font-family: var(--display);
     font-size: var(--s1);
     color: var(--ink);
+  }
+  .pw .demo-link {
+    font-size: var(--s-1);
+    color: var(--ink);
+    text-underline-offset: 3px;
   }
 
   .pw .videoband {
@@ -1042,5 +1048,17 @@ const cierreWa = whatsappLink('¡Hola Pawreli! Quiero pedir mi placa');
     reveals.forEach((el) => io.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add('in'));
+  }
+</script>
+
+<script>
+  // Lead attribution: channel links use ?ref=, and every WhatsApp CTA then states its origin.
+  import { referralLabel, withReferral } from '~/utils/referral';
+
+  const label = referralLabel(location.search);
+  if (label) {
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="https://wa.me/"]').forEach((a) => {
+      a.href = withReferral(a.href, label);
+    });
   }
 </script>
