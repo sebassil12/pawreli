@@ -16,6 +16,14 @@ const scriptType = partytown ? 'text/partytown' : undefined;
       dataLayer.push(arguments);
     };
     window.gtag('js', new Date());
-    window.gtag('config', d);
+    // page_view is sent manually on every astro:page-load (ClientRouter), not once per full load.
+    window.gtag('config', d, { send_page_view: false });
+    document.addEventListener('astro:page-load', function () {
+      window.gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: location.href,
+        page_path: location.pathname + location.search,
+      });
+    });
   }
 </script>
