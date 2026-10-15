@@ -61,6 +61,7 @@ analytics:
   vendors:
     googleAnalytics:
       id: "G-JC18NWSY95" # or "G-XXXXXXXXXX"
+      partytown: false # default is true; partytown is not installed (hasExternalScripts = false), so GA would never run
 
 ui:
   theme: 'light:only' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
